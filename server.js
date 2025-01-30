@@ -19,7 +19,7 @@ const limiter = rateLimit({
 // Middleware setup
 app.use(limiter);
 app.use(cors({
-  origin: ['https://soona112.github.io', 'http://localhost:3000'],
+  origin: ['https://soona112.github.io/Syria-invest', 'http://localhost:3000'],
   methods: ['POST', 'GET', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -146,5 +146,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🟢 Server running on port ${PORT}`);
   console.log(`🔗 Model Endpoint: ${HF_API_URL}`);
-  console.log(`🌐 Allowed Origins: https://soona112.github.io, http://localhost:3000`);
+  console.log(`🌐 Allowed Origins: https://soona112.github.io/Syria-invest, http://localhost:3000`);
 });
