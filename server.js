@@ -92,3 +92,14 @@ app.listen(PORT, () => {
   console.log(`🟢 Server running on port ${PORT}`);
   console.log(`🔗 Model Endpoint: ${HF_API_URL}`);
 });
+// Add this near your other endpoints
+app.get('/', (req, res) => {
+  res.json({
+    status: 'API Server Running',
+    endpoints: {
+      chat: 'POST /chat',
+      status: 'GET /status'
+    },
+    documentation: 'https://your-docs-link.com'
+  });
+});
