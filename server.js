@@ -8,6 +8,18 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+// Middleware setup
+app.use(cors({
+  origin: [
+    'https://soona112.github.io', // Match root domain
+    'https://soona112.github.io/Syria-invest/', // Explicit path
+    'http://localhost:3000'
+  ],
+  methods: ['POST', 'GET', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
 // Rate limiting configuration
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -16,14 +28,7 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Middleware setup
-app.use(limiter);
-app.use(cors({
-  origin: ['https://soona112.github.io/Syria-invest', 'http://localhost:3000'],
-  methods: ['POST', 'GET', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
