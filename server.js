@@ -6,7 +6,7 @@ const rateLimit = require('express-rate-limit');
 
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware setup
 app.use(cors({
