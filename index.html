@@ -358,50 +358,54 @@
       });
   
       // Handle user messages
-      async function handleUserInput() {
-    const message = chatbotInput.value.trim();
-    if (!message) return;
+      // ===== Chat Handling ===== //
+let conversationId = null;
+const MAX_HISTORY = 5; // Keep last 5 messages
 
-    // Add user message
-    addMessage(message, 'user');
-    chatbotInput.value = '';
+async function handleUserInput() {
+  const message = chatbotInput.value.trim();
+  if (!message) return;
 
-    // Show typing indicator
-    showTyping();
+  // Add user message
+  addMessage(message, 'user');
+  chatbotInput.value = '';
+  showTyping();
 
-    try {
-        console.log('Sending message to server:', message);
-        const response = await fetch('http://localhost:3000/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ message: message }),
-        });
+  try {
+    const response = await fetch('https://your-render-app.onrender.com/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: message,
+        conversation_id: conversationId // For continued conversations
+      })
+    });
 
-        console.log('Response status:', response.status);
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Server response:', data);
-            if (data.message) {
-                addMessage(data.message, 'bot');
-            } else {
-                addMessage("Received invalid response format", 'bot');
-            }
-        } else {
-            const errorData = await response.json();
-            console.log('Error data:', errorData);
-            addMessage(errorData.error || "Sorry, I couldn't fetch a response. Please try again.", 'bot');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        addMessage("Sorry, something went wrong. Please try again later.", 'bot');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    hideTyping();
+    const data = await response.json();
+    conversationId = data.conversation_id; // Store conversation ID
+    
+    // Add bot response
+    addMessage(data.message, 'bot');
+    
+    // Manage chat history
+    const messages = chatbotMessages.querySelectorAll('.chatbot-message');
+    if (messages.length > MAX_HISTORY * 2) {
+      messages[0].remove();
+      messages[1].remove();
+    }
+
+  } catch (error) {
+    console.error('Chat Error:', error);
+    addMessage("Apologies, I'm experiencing technical difficulties. Please try again later.", 'bot');
+  }
+
+  hideTyping();
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
 }
-  
       function addMessage(text, sender) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('chatbot-message', `${sender}-message`);
