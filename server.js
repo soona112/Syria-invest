@@ -2,7 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-
+app.use((req, res, next) => {
+  res.header('X-Powered-By', 'Custom Server');
+  next();
+});
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -102,4 +105,8 @@ app.get('/', (req, res) => {
     },
     documentation: 'https://your-docs-link.com'
   });
+});
+app.use((err, req, res, next) => {
+  console.error('Server Error:', err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
 });
