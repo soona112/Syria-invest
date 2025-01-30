@@ -2,111 +2,149 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-app.use((req, res, next) => {
-  res.header('X-Powered-By', 'Custom Server');
-  next();
-});
+const rateLimit = require('express-rate-limit');
+
+// Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
-app.use(express.urlencoded({ extended: true }));
-app.options('/chat', cors());
+// Rate limiting configuration
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
-// Middleware Configuration
+// Middleware setup
+app.use(limiter);
 app.use(cors({
-  origin: ['https://soona112.github.io', 'http://localhost:3000'], // Allowed domains
-  methods: ['POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: ['https://soona112.github.io', 'http://localhost:3000'],
+  methods: ['POST', 'GET', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Hugging Face API Settings
-const HF_MODEL = "microsoft/DialoGPT-medium"; // Official model name
+// Hugging Face API configuration
+const HF_MODEL = "microsoft/DialoGPT-medium";
 const HF_API_URL = `https://api-inference.huggingface.co/models/${HF_MODEL}`;
 const HF_API_KEY = process.env.HF_API_KEY;
 
-// Chat History Management
+// Conversation context management
 let chatContext = {
   past_user_inputs: [],
   generated_responses: []
 };
 
-// Enhanced Chat Endpoint
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    status: 'API Server Running',
+    version: '1.0.0',
+    endpoints: {
+      chat: 'POST /chat',
+      status: 'GET /status'
+    },
+    documentation: 'https://github.com/soona112/Syria-invest'
+  });
+});
+
+// Chat endpoint
 app.post('/chat', async (req, res) => {
   try {
-    const userMessage = req.body.message;
+    const { message } = req.body;
     
-    // Prepare conversation context
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Invalid message format' });
+    }
+
+    // Prepare payload for Hugging Face API
     const payload = {
       inputs: {
         ...chatContext,
-        text: userMessage
+        text: message
       },
       parameters: {
-        max_length: 200,  // Response length limit
-        temperature: 0.9, // Creativity level
-        repetition_penalty: 1.2 // Avoid repetition
+        max_length: 200,
+        temperature: 0.9,
+        repetition_penalty: 1.2,
+        return_full_text: false
       }
     };
 
-    // API Request
+    // Make API request
     const response = await axios.post(HF_API_URL, payload, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${HF_API_KEY}`
       },
-      timeout: 30000 // 30-second timeout
+      timeout: 45000 // 45 seconds timeout
     });
 
-    // Update conversation history
-    chatContext.past_user_inputs.push(userMessage);
+    // Update conversation context
+    chatContext.past_user_inputs.push(message);
     chatContext.generated_responses.push(response.data.generated_text);
 
-    res.json({ 
+    // Send response
+    res.json({
       message: response.data.generated_text,
-      conversation_id: Date.now() // Optional tracking
+      conversation_id: Date.now(),
+      timestamp: new Date().toISOString()
     });
 
   } catch (error) {
-    console.error('API Error:', {
+    console.error('Chat Error:', {
       status: error.response?.status,
       data: error.response?.data,
       message: error.message
     });
-    
-    res.status(error.response?.status || 500).json({
-      error: 'AI service error',
-      details: error.response?.data?.error || 'Service unavailable'
+
+    const statusCode = error.response?.status || 500;
+    const errorMessage = error.response?.data?.error || 'AI service error';
+
+    res.status(statusCode).json({
+      error: errorMessage,
+      details: statusCode === 503 ? 'Model is loading, please try again in a few seconds' : undefined
     });
   }
 });
 
-// Health Check Endpoint
+// Health check endpoint
 app.get('/status', (req, res) => {
-  res.json({ 
+  res.json({
     status: 'operational',
     model: HF_MODEL,
+    uptime: process.uptime(),
     timestamp: new Date().toISOString()
   });
 });
 
-// Start Server
+// 404 Handler
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'Endpoint not found',
+    available_endpoints: {
+      root: 'GET /',
+      chat: 'POST /chat',
+      status: 'GET /status'
+    }
+  });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Server Error:', err.stack);
+  res.status(500).json({
+    error: 'Internal Server Error',
+    message: err.message
+  });
+});
+
+// Start server
 app.listen(PORT, () => {
   console.log(`🟢 Server running on port ${PORT}`);
   console.log(`🔗 Model Endpoint: ${HF_API_URL}`);
-});
-// Add this near your other endpoints
-app.get('/', (req, res) => {
-  res.json({
-    status: 'API Server Running',
-    endpoints: {
-      chat: 'POST /chat',
-      status: 'GET /status'
-    },
-    documentation: 'https://your-docs-link.com'
-  });
-});
-app.use((err, req, res, next) => {
-  console.error('Server Error:', err.stack);
-  res.status(500).json({ error: 'Internal Server Error' });
+  console.log(`🌐 Allowed Origins: https://soona112.github.io, http://localhost:3000`);
 });
