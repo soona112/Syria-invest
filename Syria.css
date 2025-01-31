@@ -67,6 +67,28 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+/* Dark mode styles */
+body[data-theme="dark"] .navbar {
+  background: rgba(0, 0, 0, 0.9); /* Semi-transparent black */
+}
+
+body[data-theme="dark"] .navbar-scrolled {
+  background: rgba(0, 0, 0, 0.95) !important; /* Solid black background */
+}
+
+body[data-theme="dark"] .nav-link {
+  color: #fff !important; /* White text for dark background */
+}
+
+body[data-theme="dark"] .nav-link:hover {
+  color: #00bfff !important; /* Light blue hover effect */
+}
+
+body[data-theme="dark"] .gradient-text {
+  background: linear-gradient(90deg, #00bfff, #007bff); /* Light blue gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 /* Active link styling */
 .nav-link.active {
