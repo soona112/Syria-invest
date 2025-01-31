@@ -444,6 +444,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+    document.addEventListener('DOMContentLoaded', () => {
+  const languageSwitcher = document.getElementById('languageSwitcher');
+  const elementsToTranslate = document.querySelectorAll('[data-translate]');
+
+  let currentLanguage = 'en'; // Default language
+
+  // Load translations from JSON file
+  async function loadTranslations() {
+    const response = await fetch('translations.json');
+    return await response.json();
+  }
+
+  // Update the text content of elements
+  async function updateLanguage(lang) {
+    const translations = await loadTranslations();
+    elementsToTranslate.forEach(element => {
+      const key = element.getAttribute('data-translate');
+      element.textContent = translations[lang][key];
+    });
+
+    // Update the language switcher button text
+    languageSwitcher.textContent = lang === 'en' ? '🌐 English' : '🌐 العربية';
+  }
+
+  // Toggle between English and Arabic
+  languageSwitcher.addEventListener('click', () => {
+    currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
+    updateLanguage(currentLanguage);
+
+    // Update the direction of the website for Arabic
+    document.body.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
+  });
+
+  // Initialize with the default language
+  updateLanguage(currentLanguage);
+});
   </script>
   
 
