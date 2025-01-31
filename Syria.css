@@ -915,3 +915,21 @@ body[data-theme="dark"] .dashboard-main {
   display: flex;
   flex-direction: column;
 }
+/* Add this to your CSS */
+body[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+body[dir="rtl"] .navbar-nav {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+body[dir="rtl"] .carousel-caption {
+  text-align: right;
+}
+
+body[dir="rtl"] .service-card {
+  text-align: right;
+}
