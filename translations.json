@@ -10,7 +10,20 @@
     "marketAnalysis": "Market Analysis",
     "businessPlanning": "Business Planning",
     "legalConsultation": "Legal Consultation",
-    "learnMore": "Learn More"
+    "learnMore": "Learn More",
+    "expert": "Expert Consultation",
+    "prof": "Professional guidance",
+    "data": "Data-driven insights for informed decisions",
+    "analysis": "Comprehensive analysis of the Syrian market to identify the best investment opportunities",
+    "businessplan": "Tailored business plans to help you succeed in the Syrian market",
+    "ExpertAdvice": "Expert legal advice to ensure compliance with Syrian regulations.",
+    "touch": "Get in touch with our team of experts today",
+    "address": "Address",
+    "Damas": "Damascus, Syria",
+    "email": "Email",
+    "phone": "Phone",
+    "name": "Full Name",
+    "msg": "Message"
   },
   "ar": {
     "home": "الرئيسية",
@@ -23,6 +36,19 @@
     "marketAnalysis": "تحليل السوق",
     "businessPlanning": "تخطيط الأعمال",
     "legalConsultation": "استشارة قانونية",
-    "learnMore": "تعلم المزيد"
+    "learnMore": "تعلم المزيد",
+    "expert": "استشارة الخبراء",
+    "prof": "توجيه احترافي",
+    "data": "رؤى تعتمد على البيانات لاتخاذ قرارات مستنيرة",
+    "analysis": "تحليل شامل للسوق السوري لتحديد أفضل الفرص الاستثمارية",
+    "businessplan": "خطط أعمال مخصصة لمساعدتك على النجاح في السوق السوري",
+    "ExpertAdvice": "نصائح قانونية من خبراء لضمان الامتثال للوائح السورية.",
+    "touch": "تواصل مع فريق خبرائنا اليوم",
+    "address": "العنوان",
+    "Damas": "دمشق، سوريا",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "name": "الاسم الكامل",
+    "msg": "الرسالة"
   }
 }
