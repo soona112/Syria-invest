@@ -1,0 +1,28 @@
+{
+  "en": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About Us",
+    "contact": "Contact",
+    "heroTitle": "Strategic Investment Solutions",
+    "heroSubtitle": "Your gateway to successful investments in Syria",
+    "getStarted": "Get Started",
+    "marketAnalysis": "Market Analysis",
+    "businessPlanning": "Business Planning",
+    "legalConsultation": "Legal Consultation",
+    "learnMore": "Learn More"
+  },
+  "ar": {
+    "home": "الرئيسية",
+    "services": "الخدمات",
+    "about": "من نحن",
+    "contact": "اتصل بنا",
+    "heroTitle": "حلول استثمارية استراتيجية",
+    "heroSubtitle": "بوابتك إلى الاستثمار الناجح في سوريا",
+    "getStarted": "ابدأ الآن",
+    "marketAnalysis": "تحليل السوق",
+    "businessPlanning": "تخطيط الأعمال",
+    "legalConsultation": "استشارة قانونية",
+    "learnMore": "تعلم المزيد"
+  }
+}
