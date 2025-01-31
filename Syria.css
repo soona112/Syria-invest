@@ -197,11 +197,139 @@ body[data-theme="dark"] .gradient-text {
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
   }
   
-  /* Footer */
-  .footer {
-    background-color: var(--primary-color);
-    color: white;
+ /* Footer Styles */
+.footer {
+  background: #2c3e50; /* Dark blue background */
+  color: #fff;
+  padding: 4rem 0 2rem 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.footer-links,
+.footer-contact {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li,
+.footer-contact li {
+  margin-bottom: 0.75rem;
+}
+
+.footer-links a,
+.footer-contact a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover,
+.footer-contact a:hover {
+  color: #00bfff; /* Light blue hover effect */
+}
+
+.footer-contact i {
+  margin-right: 0.5rem;
+  color: #00bfff; /* Light blue icon color */
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.newsletter-form input {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.newsletter-form button {
+  background: #00bfff; /* Light blue button */
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.newsletter-form button:hover {
+  background: #007bff; /* Darker blue on hover */
+}
+
+.footer-social {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.footer-social a {
+  color: #fff;
+  font-size: 1.5rem;
+  margin: 0 0.75rem;
+  transition: color 0.3s ease;
+}
+
+.footer-social a:hover {
+  color: #00bfff; /* Light blue hover effect */
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 2rem;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
+
+  .footer-section {
+    margin-bottom: 2rem;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .newsletter-form input,
+  .newsletter-form button {
+    width: 100%;
+  }
+}
   
   .carousel {
     margin-top: 76px; /* Adjust based on navbar height */
