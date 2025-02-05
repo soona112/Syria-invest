@@ -268,35 +268,6 @@
         </div>
     </div>
 </section>
-
-<!-- Chatbot Container -->
-<div class="chatbot-container">
-  <!-- Chat Toggle Button -->
-  <button class="chatbot-toggle" aria-label="Open chat">
-    <i class="fas fa-comment-dots"></i> <!-- Chat icon -->
-  </button>
-
-  <!-- Chat Box -->
-  <div class="chatbot-box">
-    <div class="chatbot-header">
-      <h6>AI Assistant</h6>
-      <button class="chatbot-close" aria-label="Close chat">×</button>
-    </div>
-    <div class="chatbot-messages"></div>
-    <div class="chatbot-input-container">
-      <input
-        type="text"
-        class="chatbot-input"
-        placeholder="Ask me about investment opportunities..."
-        aria-label="Chat message"
-      >
-      <button class="chatbot-send" aria-label="Send message">
-        <i class="fas fa-paper-plane"></i> <!-- Send icon -->
-      </button>
-    </div>
-  </div>
-</div>
-
   
    <!-- Footer -->
   <footer class="footer">
@@ -455,7 +426,7 @@
 });
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-  <script>
+ <script>
     // Initialize AOS
     AOS.init({
       duration: 800,
@@ -493,152 +464,54 @@
       themeToggle.textContent = '☀️';
     }
   
-    document.addEventListener('DOMContentLoaded', () => {
-      const chatbotToggle = document.querySelector('.chatbot-toggle');
-      const chatbotContainer = document.querySelector('.chatbot-container');
-      const chatbotClose = document.querySelector('.chatbot-close');
-      const chatbotSend = document.querySelector('.chatbot-send');
-      const chatbotInput = document.querySelector('.chatbot-input');
-      const chatbotMessages = document.querySelector('.chatbot-messages');
-  
-      // Toggle chatbot visibility
-      chatbotToggle.addEventListener('click', () => {
-        chatbotContainer.classList.toggle('active');
-      });
-  
-      chatbotClose.addEventListener('click', () => {
-        chatbotContainer.classList.remove('active');
-      });
-  
-      // Handle user messages
-      // ===== Chat Handling ===== //
-let conversationId = null;
-const MAX_HISTORY = 5; // Keep last 5 messages
-
-async function handleUserInput() {
-  const message = chatbotInput.value.trim();
-  if (!message) return;
-
-  // Add user message
-  addMessage(message, 'user');
-  chatbotInput.value = '';
-  showTyping();
-
-  try {
-    const response = await fetch('https://syria-chat-server.onrender.com/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: message,
-        conversation_id: conversationId // For continued conversations
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    conversationId = data.conversation_id; // Store conversation ID
-    
-    // Add bot response
-    addMessage(data.message, 'bot');
-    
-    // Manage chat history
-    const messages = chatbotMessages.querySelectorAll('.chatbot-message');
-    if (messages.length > MAX_HISTORY * 2) {
-      messages[0].remove();
-      messages[1].remove();
-    }
-
-  } catch (error) {
-    console.error('Chat Error:', error);
-    addMessage("Apologies, I'm experiencing technical difficulties. Please try again later.", 'bot');
-  }
-
-  hideTyping();
-  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-}
-      function addMessage(text, sender) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('chatbot-message', `${sender}-message`);
-        messageDiv.textContent = text;
-        chatbotMessages.appendChild(messageDiv);
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-      }
-  
-      function showTyping() {
-        const typingDiv = document.createElement('div');
-        typingDiv.classList.add('chatbot-message', 'bot-message', 'typing-indicator');
-        typingDiv.innerHTML = `
-          <div class="typing-dot"></div>
-          <div class="typing-dot" style="animation-delay: 0.2s"></div>
-          <div class="typing-dot" style="animation-delay: 0.4s"></div>
-        `;
-        chatbotMessages.appendChild(typingDiv);
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-      }
-  
-      function hideTyping() {
-        const typingIndicators = document.querySelectorAll('.typing-indicator');
-        typingIndicators.forEach(indicator => indicator.remove());
-      }
-  
-      // Event listeners
-      chatbotSend.addEventListener('click', handleUserInput);
-      chatbotInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleUserInput();
-      });
-    });
     // Add to Syria.html's script section after AOS initialization
-// Add this to your existing script section
-document.addEventListener('DOMContentLoaded', () => {
-  const authButton = document.getElementById('authButton');
-  if (authButton) {
-    authButton.addEventListener('click', () => {
-      // Show auth modal
-      document.dispatchEvent(new CustomEvent('openAuthModal'));
-    });
-  }
-});
     document.addEventListener('DOMContentLoaded', () => {
-  const languageSwitcher = document.getElementById('languageSwitcher');
-  const elementsToTranslate = document.querySelectorAll('[data-translate]');
-
-  let currentLanguage = 'en'; // Default language
-
-  // Load translations from JSON file
-  async function loadTranslations() {
-    const response = await fetch('translations.json');
-    return await response.json();
-  }
-
-  // Update the text content of elements
-  async function updateLanguage(lang) {
-    const translations = await loadTranslations();
-    elementsToTranslate.forEach(element => {
-      const key = element.getAttribute('data-translate');
-      element.textContent = translations[lang][key];
+      const authButton = document.getElementById('authButton');
+      if (authButton) {
+        authButton.addEventListener('click', () => {
+          // Show auth modal
+          document.dispatchEvent(new CustomEvent('openAuthModal'));
+        });
+      }
     });
-
-    // Update the language switcher button text
-    languageSwitcher.textContent = lang === 'en' ? '🌐 English' : '🌐 العربية';
-  }
-
-  // Toggle between English and Arabic
-  languageSwitcher.addEventListener('click', () => {
-    currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
-    updateLanguage(currentLanguage);
-
-    // Update the direction of the website for Arabic
-    document.body.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
-  });
-
-  // Initialize with the default language
-  updateLanguage(currentLanguage);
-});
-
-  </script>
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      const languageSwitcher = document.getElementById('languageSwitcher');
+      const elementsToTranslate = document.querySelectorAll('[data-translate]');
+  
+      let currentLanguage = 'en'; // Default language
+  
+      // Load translations from JSON file
+      async function loadTranslations() {
+        const response = await fetch('translations.json');
+        return await response.json();
+      }
+  
+      // Update the text content of elements
+      async function updateLanguage(lang) {
+        const translations = await loadTranslations();
+        elementsToTranslate.forEach(element => {
+          const key = element.getAttribute('data-translate');
+          element.textContent = translations[lang][key];
+        });
+  
+        // Update the language switcher button text
+        languageSwitcher.textContent = lang === 'en' ? '🌐 English' : '🌐 العربية';
+      }
+  
+      // Toggle between English and Arabic
+      languageSwitcher.addEventListener('click', () => {
+        currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
+        updateLanguage(currentLanguage);
+  
+        // Update the direction of the website for Arabic
+        document.body.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
+      });
+  
+      // Initialize with the default language
+      updateLanguage(currentLanguage);
+    });
+</script>
  
  <script type="text/babel">
     const modalContainer = document.getElementById('authModalRoot');
