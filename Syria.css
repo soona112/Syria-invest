@@ -1032,3 +1032,96 @@ body[dir="rtl"] .carousel-caption {
 body[dir="rtl"] .service-card {
   text-align: right;
 }
+
+.map-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 20px;
+        }
+ .map-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+ .pin {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #e74c3c;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            transition: transform 0.2s;
+        }
+
+.pin:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            z-index: 1000;
+        }
+
+        .pin::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            width: 2px;
+            height: 15px;
+            background: #e74c3c;
+            transform: translateX(-50%);
+        }
+
+        .pin-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: calc(100% + 20px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            min-width: 200px;
+            display: none;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .pin:hover .tooltip {
+            display: block;
+        }
+
+        .tooltip h3 {
+            margin: 0 0 8px 0;
+            color: #f1c40f;
+        }
+
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
