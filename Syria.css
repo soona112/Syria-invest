@@ -78,6 +78,7 @@
 .navbar-scrolled {
   background: rgba(255, 255, 255, 0.95) !important; /* Solid white background */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Add shadow when scrolled */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .navbar-scrolled .nav-link {
