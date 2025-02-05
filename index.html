@@ -36,6 +36,33 @@
   </style>
 </head>
 <body>
+  <!-- Loading Animation -->
+    <div id="loader">
+        <div class="loader-animation">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content" style="display: none; text-align: center; padding: 50px;">
+        <h1>Welcome to the Website</h1>
+        <p>Your content goes here...</p>
+    </div>
+
+    <script>
+        // Hide the loader after 2.5 seconds and show the main content
+        window.addEventListener("load", function() {
+            setTimeout(() => {
+                document.getElementById("loader").style.opacity = "0";
+                setTimeout(() => {
+                    document.getElementById("loader").style.display = "none";
+                    document.getElementById("content").style.display = "block";
+                }, 600);
+            }, 2500);
+        });
+    </script>
   <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
