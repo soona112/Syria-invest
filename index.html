@@ -249,6 +249,35 @@
     </div>
 </section>
 
+<!-- Chatbot Container -->
+<div class="chatbot-container">
+  <!-- Chat Toggle Button -->
+  <button class="chatbot-toggle" aria-label="Open chat">
+    <i class="fas fa-comment-dots"></i> <!-- Chat icon -->
+  </button>
+
+  <!-- Chat Box -->
+  <div class="chatbot-box">
+    <div class="chatbot-header">
+      <h6>AI Assistant</h6>
+      <button class="chatbot-close" aria-label="Close chat">×</button>
+    </div>
+    <div class="chatbot-messages"></div>
+    <div class="chatbot-input-container">
+      <input
+        type="text"
+        class="chatbot-input"
+        placeholder="Ask me about investment opportunities..."
+        aria-label="Chat message"
+      >
+      <button class="chatbot-send" aria-label="Send message">
+        <i class="fas fa-paper-plane"></i> <!-- Send icon -->
+      </button>
+    </div>
+  </div>
+</div>
+
+  
    <!-- Footer -->
   <footer class="footer">
   <div class="container">
@@ -590,34 +619,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
   </script>
- <!-- Chatbot Container -->
-<div class="chatbot-container">
-  <!-- Chat Toggle Button -->
-  <button class="chatbot-toggle" aria-label="Open chat">
-    <i class="fas fa-comment-dots"></i> <!-- Chat icon -->
-  </button>
-
-  <!-- Chat Box -->
-  <div class="chatbot-box">
-    <div class="chatbot-header">
-      <h6>AI Assistant</h6>
-      <button class="chatbot-close" aria-label="Close chat">×</button>
-    </div>
-    <div class="chatbot-messages"></div>
-    <div class="chatbot-input-container">
-      <input
-        type="text"
-        class="chatbot-input"
-        placeholder="Ask me about investment opportunities..."
-        aria-label="Chat message"
-      >
-      <button class="chatbot-send" aria-label="Send message">
-        <i class="fas fa-paper-plane"></i> <!-- Send icon -->
-      </button>
-    </div>
-  </div>
-</div>
-
+ 
  <script type="text/babel">
     const modalContainer = document.getElementById('authModalRoot');
     
