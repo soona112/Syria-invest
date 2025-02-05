@@ -723,7 +723,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function init() {
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x000011);
+            scene.background = new THREE.Color(0xffffff);
             
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = 5;
@@ -750,10 +750,10 @@ document.addEventListener('DOMContentLoaded', function() {
             geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
 
             const material = new THREE.PointsMaterial({ 
-                color: 0xffffff,
+                color: 0xAAAAAA,
                 size: 0.05,
                 transparent: true,
-                opacity: 0.8
+                opacity: 0.7
             });
 
             particles = new THREE.Points(geometry, material);
@@ -777,12 +777,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const velocities = particleVelocities;
 
             for (let i = 0; i < positions.length; i += 3) {
-                // Move particles
                 positions[i] += velocities[i];
                 positions[i+1] += velocities[i+1];
                 positions[i+2] += velocities[i+2];
 
-                // Wrap around when particles go too far
                 if (Math.abs(positions[i]) > 15) velocities[i] *= -1;
                 if (Math.abs(positions[i+1]) > 15) velocities[i+1] *= -1;
                 if (Math.abs(positions[i+2]) > 15) velocities[i+2] *= -1;
@@ -790,7 +788,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             particles.geometry.attributes.position.needsUpdate = true;
 
-            // Rotate scene for additional movement
             particles.rotation.x += 0.001;
             particles.rotation.y += 0.002;
 
