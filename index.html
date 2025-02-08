@@ -675,105 +675,81 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = '/dashboard.html';
     }
 });
-const CONFIG = {
-            API_URL: 'https://api.apilayer.com/exchangerates_data/latest',
-            REFRESH_INTERVAL: 60000,
-            RETRY_DELAY: 5000,
-            MAX_RETRIES: 3,
-            CURRENCIES: ['USD', 'EUR', 'GBP', 'TRY', 'AED']
-        };
+ // Configuration
+    const CONFIG = {
+        API_URL: 'https://api.apilayer.com/exchangerates_data/latest',
+        REFRESH_INTERVAL: 60000,
+        RETRY_DELAY: 5000,
+        MAX_RETRIES: 3,
+        CURRENCIES: ['USD', 'EUR', 'GBP', 'TRY', 'AED']
+    };
 
-        class ExchangeRateTracker {
-            constructor(apiKey) {
-                this.apiKey = apiKey;
-                this.retryCount = 0;
-                this.lastUpdate = null;
-            }
+    function displayExchangeRates(rates) {
+        const container = document.querySelector('.rates-grid');
+        const statusElement = document.querySelector('.status');
+        const lastUpdateElement = document.querySelector('.last-update');
 
-            async fetchExchangeRates() {
-                const params = new URLSearchParams({
-                    base: 'SYP',
-                    symbols: CONFIG.CURRENCIES.join(',')
-                });
-
-                try {
-                    const response = await fetch(`${CONFIG.API_URL}?${params}`, {
-                        headers: {
-                            'apikey': this.apiKey
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    
-                    if (!data.rates) {
-                        throw new Error('No rates found in response');
-                    }
-
-                    this.retryCount = 0;
-                    this.lastUpdate = new Date();
-                    this.displayExchangeRates(data.rates);
-                    this.scheduleNextUpdate();
-
-                } catch (error) {
-                    this.handleError(error);
-                }
-            }
-
-            displayExchangeRates(rates) {
-                const container = document.querySelector('.rates-grid');
-                const statusElement = document.querySelector('.status');
-                const lastUpdateElement = document.querySelector('.last-update');
-
-                statusElement.textContent = '';
-                container.innerHTML = '';
-
-                CONFIG.CURRENCIES.forEach(currency => {
-                    if (rates[currency]) {
-                        const rate = (1 / rates[currency]).toFixed(4);
-                        const rateCard = document.createElement('div');
-                        rateCard.className = 'rate-card';
-                        rateCard.innerHTML = `
-                            <div class="currency-code">${currency}</div>
-                            <div class="rate-value">${rate} SYP</div>
-                        `;
-                        container.appendChild(rateCard);
-                    }
-                });
-
-                lastUpdateElement.textContent = `Last updated: ${this.lastUpdate.toLocaleTimeString()}`;
-            }
-
-            handleError(error) {
-                console.error('Error fetching exchange rates:', error);
-                const statusElement = document.querySelector('.status');
-                statusElement.className = 'status error';
-
-                if (this.retryCount < CONFIG.MAX_RETRIES) {
-                    this.retryCount++;
-                    statusElement.textContent = `Failed to fetch rates. Retrying in ${CONFIG.RETRY_DELAY/1000} seconds... (Attempt ${this.retryCount}/${CONFIG.MAX_RETRIES})`;
-                    setTimeout(() => this.fetchExchangeRates(), CONFIG.RETRY_DELAY);
-                } else {
-                    statusElement.textContent = 'Failed to load exchange rates. Please check your API key or try again later.';
-                }
-            }
-
-            scheduleNextUpdate() {
-                setTimeout(() => this.fetchExchangeRates(), CONFIG.REFRESH_INTERVAL);
-            }
-
-            start() {
-                this.fetchExchangeRates();
-            }
+        if (!container || !statusElement || !lastUpdateElement) {
+            console.error('Required elements not found');
+            return;
         }
 
-        // Initialize the tracker with your API key
-        const tracker = new ExchangeRateTracker('7b4ae918ebe2b2e783101c5fb93b95eb
-');
-        tracker.start();
+        statusElement.textContent = '';
+        container.innerHTML = '';
+
+        Object.entries(rates).forEach(([currency, rate]) => {
+            if (CONFIG.CURRENCIES.includes(currency)) {
+                const finalRate = (1 / rate).toFixed(4);
+                const rateCard = document.createElement('div');
+                rateCard.className = 'rate-card';
+                rateCard.innerHTML = `
+                    <div class="currency-code">${currency}</div>
+                    <div class="rate-value">${finalRate} SYP</div>
+                `;
+                container.appendChild(rateCard);
+            }
+        });
+
+        lastUpdateElement.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+    }
+
+    function handleError(error) {
+        console.error('Error fetching exchange rates:', error);
+        const statusElement = document.querySelector('.status');
+        if (statusElement) {
+            statusElement.className = 'status error';
+            statusElement.textContent = 'Failed to load exchange rates. Please try again later.';
+        }
+    }
+
+    async function fetchExchangeRates() {
+        try {
+            const response = await fetch(`${CONFIG.API_URL}?base=SYP`, {
+                headers: {
+                    'apikey': '7b4ae918ebe2b2e783101c5fb93b95eb' // Replace with your actual API key
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            if (data.rates) {
+                displayExchangeRates(data.rates);
+                setTimeout(fetchExchangeRates, CONFIG.REFRESH_INTERVAL);
+            } else {
+                throw new Error('No rates found in response');
+            }
+        } catch (error) {
+            handleError(error);
+        }
+    }
+
+    // Start fetching exchange rates
+    fetchExchangeRates();
+});
 </script>
   </script>
 <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
