@@ -671,6 +671,156 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = '/dashboard.html';
     }
 });
+
+// Configuration
+const CONFIG = {
+    API_URL: 'https://api.apilayer.com/exchangerates_data/latest',
+    REFRESH_INTERVAL: 60000, // Refresh every minute
+    RETRY_DELAY: 5000, // Wait 5 seconds before retrying
+    MAX_RETRIES: 3,
+    CURRENCIES: ['USD', 'EUR', 'GBP', 'TRY', 'AED'] // Added more relevant currencies
+};
+
+class ExchangeRateTracker {
+    constructor(apiKey) {
+        this.apiKey = apiKey;
+        this.retryCount = 0;
+        this.lastUpdate = null;
+        this.setupUI();
+    }
+
+    setupUI() {
+        // Create container if it doesn't exist
+        if (!document.querySelector('.exchange-rates')) {
+            const container = document.createElement('div');
+            container.className = 'exchange-rates';
+            container.innerHTML = `
+                <h2>Live Exchange Rates (SYP)</h2>
+                <div class="status">Fetching rates...</div>
+                <div class="rates-container"></div>
+                <div class="last-update"></div>
+            `;
+            document.body.appendChild(container);
+        }
+
+        // Add some basic styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .exchange-rates {
+                max-width: 600px;
+                margin: 20px auto;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .rate-item {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px;
+                border-bottom: 1px solid #eee;
+            }
+            .status {
+                color: #666;
+                margin: 10px 0;
+            }
+            .error {
+                color: #d32f2f;
+            }
+            .last-update {
+                font-size: 0.8em;
+                color: #666;
+                margin-top: 10px;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    async fetchExchangeRates() {
+        const params = new URLSearchParams({
+            base: 'SYP',
+            symbols: CONFIG.CURRENCIES.join(',')
+        });
+
+        try {
+            const response = await fetch(`${CONFIG.API_URL}?${params}`, {
+                headers: {
+                    'apikey': this.apiKey
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            if (!data.rates) {
+                throw new Error('No rates found in response');
+            }
+
+            this.retryCount = 0; // Reset retry count on successful fetch
+            this.lastUpdate = new Date();
+            this.displayExchangeRates(data.rates);
+            this.scheduleNextUpdate();
+
+        } catch (error) {
+            this.handleError(error);
+        }
+    }
+
+    displayExchangeRates(rates) {
+        const container = document.querySelector('.rates-container');
+        const statusElement = document.querySelector('.status');
+        const lastUpdateElement = document.querySelector('.last-update');
+
+        statusElement.textContent = '';
+        container.innerHTML = '';
+
+        CONFIG.CURRENCIES.forEach(currency => {
+            if (rates[currency]) {
+                const rate = (1 / rates[currency]).toFixed(4); // More precise conversion
+                const rateItem = document.createElement('div');
+                rateItem.className = 'rate-item';
+                rateItem.innerHTML = `
+                    <span>1 ${currency}</span>
+                    <strong>${rate} SYP</strong>
+                `;
+                container.appendChild(rateItem);
+            }
+        });
+
+        lastUpdateElement.textContent = `Last updated: ${this.lastUpdate.toLocaleTimeString()}`;
+    }
+
+    handleError(error) {
+        console.error('Error fetching exchange rates:', error);
+        const statusElement = document.querySelector('.status');
+        statusElement.className = 'status error';
+
+        if (this.retryCount < CONFIG.MAX_RETRIES) {
+            this.retryCount++;
+            statusElement.textContent = `Failed to fetch rates. Retrying in ${CONFIG.RETRY_DELAY/1000} seconds... (Attempt ${this.retryCount}/${CONFIG.MAX_RETRIES})`;
+            setTimeout(() => this.fetchExchangeRates(), CONFIG.RETRY_DELAY);
+        } else {
+            statusElement.textContent = 'Failed to load exchange rates. Please check your API key or try again later.';
+        }
+    }
+
+    scheduleNextUpdate() {
+        setTimeout(() => this.fetchExchangeRates(), CONFIG.REFRESH_INTERVAL);
+    }
+
+    start() {
+        this.fetchExchangeRates();
+    }
+}
+
+// Usage
+const tracker = new ExchangeRateTracker('7b4ae918ebe2b2e783101c5fb93b95eb
+');
+tracker.start();
+
+   
 </script>
   </script>
 <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
