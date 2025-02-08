@@ -1113,82 +1113,44 @@ body[dir="rtl"] .service-card {
             display: none;
         }
 
-/* Exchange Rates Container */
-        .exchange-rates {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 24px;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-        }
+.exchange-rates-container {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    margin: 20px 0;
+    width: 100%;
+}
 
-        /* Header */
-        .exchange-rates h2 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 16px;
-        }
+.rates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
 
-        /* Currency List */
-        .currency-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+.rate-card {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+}
 
-        .currency-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
+.rate-card:hover {
+    transform: translateY(-3px);
+}
 
-        .currency-item:last-child {
-            border-bottom: none;
-        }
+.currency-code {
+    color: #0D6EFD;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
 
-        .currency-code {
-            font-size: 18px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        .currency-rate {
-            font-size: 18px;
-            color: #007bff;
-            font-weight: bold;
-        }
-
-        /* Loading State */
-        .loading {
-            font-size: 16px;
-            color: #777;
-        }
-
-        /* Error State */
-        .error {
-            font-size: 16px;
-            color: #ff4d4d;
-        }
-
-        /* Refresh Button */
-        .refresh-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .refresh-button:hover {
-            background-color: #0056b3;
-        }
-
+.rate-value {
+    color: #44546F;
+    font-size: 24px;
+    font-weight: 700;
+}
 
