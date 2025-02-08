@@ -33,48 +33,6 @@
     body[dir="rtl"] .stat-box,
     body[dir="rtl"] .contact-form {
       text-align: right;
-
-      .exchange-rates {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            background-color: white;
-        }
-
-        h2 {
-            color: #333;
-            margin-top: 0;
-        }
-
-        .rate-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .rate-item:last-child {
-            border-bottom: none;
-        }
-
-        .status {
-            color: #666;
-            margin: 10px 0;
-        }
-
-        .error {
-            color: #d32f2f;
-        }
-
-        .last-update {
-            font-size: 0.8em;
-            color: #666;
-            margin-top: 10px;
-            text-align: right;
-        }
-    }
   </style>
 </head>
 <body>
@@ -215,10 +173,10 @@
   </section>
 
 
-<div class="exchange-rates">
-        <h2>Live Exchange Rates (SYP)</h2>
+<div class="exchange-rates-container">
+        <h2 class="exchange-rates-title">Live Exchange Rates (SYP)</h2>
         <div class="status">Loading exchange rates...</div>
-        <div class="rates-container"></div>
+        <div class="rates-grid"></div>
         <div class="last-update"></div>
     </div>
 
@@ -717,8 +675,7 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = '/dashboard.html';
     }
 });
-//exchange rates
- const CONFIG = {
+const CONFIG = {
             API_URL: 'https://api.apilayer.com/exchangerates_data/latest',
             REFRESH_INTERVAL: 60000,
             RETRY_DELAY: 5000,
@@ -767,7 +724,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             displayExchangeRates(rates) {
-                const container = document.querySelector('.rates-container');
+                const container = document.querySelector('.rates-grid');
                 const statusElement = document.querySelector('.status');
                 const lastUpdateElement = document.querySelector('.last-update');
 
@@ -777,13 +734,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 CONFIG.CURRENCIES.forEach(currency => {
                     if (rates[currency]) {
                         const rate = (1 / rates[currency]).toFixed(4);
-                        const rateItem = document.createElement('div');
-                        rateItem.className = 'rate-item';
-                        rateItem.innerHTML = `
-                            <span>1 ${currency}</span>
-                            <strong>${rate} SYP</strong>
+                        const rateCard = document.createElement('div');
+                        rateCard.className = 'rate-card';
+                        rateCard.innerHTML = `
+                            <div class="currency-code">${currency}</div>
+                            <div class="rate-value">${rate} SYP</div>
                         `;
-                        container.appendChild(rateItem);
+                        container.appendChild(rateCard);
                     }
                 });
 
@@ -817,8 +774,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const tracker = new ExchangeRateTracker('7b4ae918ebe2b2e783101c5fb93b95eb
 ');
         tracker.start();
-
-   
 </script>
   </script>
 <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
