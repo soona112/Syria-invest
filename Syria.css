@@ -1113,44 +1113,4 @@ body[dir="rtl"] .service-card {
             display: none;
         }
 
-.exchange-rates-container {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    padding: 30px;
-    margin: 20px 0;
-    width: 100%;
-}
-
-.rates-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.rate-card {
-    background: #f8f9fa;
-    border-radius: 15px;
-    padding: 20px;
-    text-align: center;
-    transition: transform 0.2s;
-}
-
-.rate-card:hover {
-    transform: translateY(-3px);
-}
-
-.currency-code {
-    color: #0D6EFD;
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-
-.rate-value {
-    color: #44546F;
-    font-size: 24px;
-    font-weight: 700;
-}
 
