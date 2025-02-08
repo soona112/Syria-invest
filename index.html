@@ -173,12 +173,7 @@
   </section>
 
 
-<div class="exchange-rates-container">
-        <h2 class="exchange-rates-title">Live Exchange Rates (SYP)</h2>
-        <div class="status">Loading exchange rates...</div>
-        <div class="rates-grid"></div>
-        <div class="last-update"></div>
-    </div>
+
 
    <section id="contact" class="py-5">
     <div class="container">
@@ -674,81 +669,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (token) {
         window.location.href = '/dashboard.html';
     }
-});
- // Configuration
-    const CONFIG = {
-        API_URL: 'https://api.apilayer.com/exchangerates_data/latest',
-        REFRESH_INTERVAL: 60000,
-        RETRY_DELAY: 5000,
-        MAX_RETRIES: 3,
-        CURRENCIES: ['USD', 'EUR', 'GBP', 'TRY', 'AED']
-    };
-
-    function displayExchangeRates(rates) {
-        const container = document.querySelector('.rates-grid');
-        const statusElement = document.querySelector('.status');
-        const lastUpdateElement = document.querySelector('.last-update');
-
-        if (!container || !statusElement || !lastUpdateElement) {
-            console.error('Required elements not found');
-            return;
-        }
-
-        statusElement.textContent = '';
-        container.innerHTML = '';
-
-        Object.entries(rates).forEach(([currency, rate]) => {
-            if (CONFIG.CURRENCIES.includes(currency)) {
-                const finalRate = (1 / rate).toFixed(4);
-                const rateCard = document.createElement('div');
-                rateCard.className = 'rate-card';
-                rateCard.innerHTML = `
-                    <div class="currency-code">${currency}</div>
-                    <div class="rate-value">${finalRate} SYP</div>
-                `;
-                container.appendChild(rateCard);
-            }
-        });
-
-        lastUpdateElement.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
-    }
-
-    function handleError(error) {
-        console.error('Error fetching exchange rates:', error);
-        const statusElement = document.querySelector('.status');
-        if (statusElement) {
-            statusElement.className = 'status error';
-            statusElement.textContent = 'Failed to load exchange rates. Please try again later.';
-        }
-    }
-
-    async function fetchExchangeRates() {
-        try {
-            const response = await fetch(`${CONFIG.API_URL}?base=SYP`, {
-                headers: {
-                    'apikey': '7b4ae918ebe2b2e783101c5fb93b95eb' // Replace with your actual API key
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            
-            if (data.rates) {
-                displayExchangeRates(data.rates);
-                setTimeout(fetchExchangeRates, CONFIG.REFRESH_INTERVAL);
-            } else {
-                throw new Error('No rates found in response');
-            }
-        } catch (error) {
-            handleError(error);
-        }
-    }
-
-    // Start fetching exchange rates
-    fetchExchangeRates();
 });
 </script>
   </script>
