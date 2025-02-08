@@ -37,6 +37,25 @@
   </style>
 </head>
 <body>
+
+<!-- Splash Screen -->
+    <div class="splash">
+        <div class="logo">Syria Invest</div>
+        <div class="loader">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+   <script>
+        // Hide splash screen after animation and show main content
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.splash').style.display = 'none';
+                document.querySelector('.main-content').style.display = 'block';
+            }, 3000); // Match this duration with the animation duration
+        });
+    </script>
+  
   <!-- Loading Animation -->
     <div id="loader">
         <div class="loader-animation">
