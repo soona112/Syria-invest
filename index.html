@@ -33,6 +33,47 @@
     body[dir="rtl"] .stat-box,
     body[dir="rtl"] .contact-form {
       text-align: right;
+
+      .exchange-rates {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .rate-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .rate-item:last-child {
+            border-bottom: none;
+        }
+
+        .status {
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .error {
+            color: #d32f2f;
+        }
+
+        .last-update {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 10px;
+            text-align: right;
+        }
     }
   </style>
 </head>
@@ -174,7 +215,12 @@
   </section>
 
 
-
+<div class="exchange-rates">
+        <h2>Live Exchange Rates (SYP)</h2>
+        <div class="status">Loading exchange rates...</div>
+        <div class="rates-container"></div>
+        <div class="last-update"></div>
+    </div>
 
    <section id="contact" class="py-5">
     <div class="container">
