@@ -173,11 +173,6 @@
   </section>
 
 
-<div class="exchange-rates-container">
-    <h2 class="exchange-rates-title">Live Exchange Rates (SYP)</h2>
-    <div id="rates-grid" class="rates-grid"></div>
-</div>
-
    <section id="contact" class="py-5">
     <div class="container">
       <div class="row">
@@ -673,56 +668,6 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = '/dashboard.html';
     }
 });
-
-// Exchange Rate Functionality
-const API_KEY = '7b4ae918ebe2b2e783101c5fb93b95eb'; // Replace with your actual API key
-
-function updateExchangeRates() {
-    const ratesGrid = document.getElementById('rates-grid');
-    if (!ratesGrid) return;
-
-    fetch('https://api.exchangeratesapi.io/v1/latest?access_key=7b4ae918ebe2b2e783101c5fb93b95eb&format=1', {
-        method: 'GET',
-        headers: {
-            'apikey': API_KEY
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.rates) {
-            const currencies = ['USD', 'EUR', 'GBP', 'TRY', 'AED'];
-            ratesGrid.innerHTML = '';
-            
-            currencies.forEach(currency => {
-                if (data.rates[currency]) {
-                    const rate = (1 / data.rates[currency]).toFixed(4);
-                    const card = document.createElement('div');
-                    card.className = 'rate-card';
-                    card.innerHTML = `
-                        <div class="currency-code">${currency}</div>
-                        <div class="rate-value">${rate} SYP</div>
-                    `;
-                    ratesGrid.appendChild(card);
-                }
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching exchange rates:', error);
-        ratesGrid.innerHTML = '<div class="error">Failed to load exchange rates</div>';
-    });
-}
-
-// Initialize exchange rates when the DOM is loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateExchangeRates);
-} else {
-    updateExchangeRates();
-}
-
-// Update rates every minute
-setInterval(updateExchangeRates, 60000);
-
    
 </script>
   </script>
