@@ -173,13 +173,10 @@
   </section>
 
 
-<div class="exchange-rates">
-        <h2>Live Exchange Rates (SYP)</h2>
-        <ul class="currency-list">
-            <li class="loading">Loading exchange rates...</li>
-        </ul>
-        <button class="refresh-button" onclick="fetchExchangeRates()">Refresh Rates</button>
-    </div>
+<div class="exchange-rates-container">
+    <h2 class="exchange-rates-title">Live Exchange Rates (SYP)</h2>
+    <div id="rates-grid" class="rates-grid"></div>
+</div>
 
    <section id="contact" class="py-5">
     <div class="container">
@@ -677,60 +674,54 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Replace with your API access key
-        const apiKey = '7b4ae918ebe2b2e783101c5fb93b95eb';
+// Exchange Rate Functionality
+const API_KEY = '7b4ae918ebe2b2e783101c5fb93b95eb'; // Replace with your actual API key
 
-        // API endpoint for latest exchange rates with SYP as the base currency
-        const apiUrl = `https://api.exchangeratesapi.io/v1/latest?access_key=7b4ae918ebe2b2e783101c5fb93b95eb&format=1`;
+function updateExchangeRates() {
+    const ratesGrid = document.getElementById('rates-grid');
+    if (!ratesGrid) return;
 
-        // Function to fetch and display exchange rates
-        async function fetchExchangeRates() {
-            const currencyList = document.querySelector('.currency-list');
-            currencyList.innerHTML = '<li class="loading">Loading exchange rates...</li>';
-
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch exchange rates');
-                }
-                const data = await response.json();
-
-                // Check if rates are available
-                if (data.rates) {
-                    displayExchangeRates(data.rates);
-                } else {
-                    throw new Error('No rates found');
-                }
-            } catch (error) {
-                console.error('Error fetching exchange rates:', error);
-                currencyList.innerHTML = '<li class="error">Failed to load exchange rates. Please try again later.</li>';
-            }
+    fetch('https://api.exchangeratesapi.io/v1/latest?access_key=7b4ae918ebe2b2e783101c5fb93b95eb&format=1', {
+        method: 'GET',
+        headers: {
+            'apikey': API_KEY
         }
-
-        // Function to display exchange rates
-        function displayExchangeRates(rates) {
-            const currencyList = document.querySelector('.currency-list');
-            currencyList.innerHTML = ''; // Clear loading message
-
-            // Example: Display rates for USD, EUR, GBP, and TRY
-            const currencies = ['USD', 'EUR', 'GBP', 'TRY'];
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.rates) {
+            const currencies = ['USD', 'EUR', 'GBP', 'TRY', 'AED'];
+            ratesGrid.innerHTML = '';
+            
             currencies.forEach(currency => {
-                if (rates[currency]) {
-                    const rate = (1 / rates[currency]).toFixed(2); // Convert to SYP per foreign currency
-                    const listItem = document.createElement('li');
-                    listItem.className = 'currency-item';
-                    listItem.innerHTML = `
-                        <span class="currency-code">1 ${currency}</span>
-                        <span class="currency-rate">${rate} SYP</span>
+                if (data.rates[currency]) {
+                    const rate = (1 / data.rates[currency]).toFixed(4);
+                    const card = document.createElement('div');
+                    card.className = 'rate-card';
+                    card.innerHTML = `
+                        <div class="currency-code">${currency}</div>
+                        <div class="rate-value">${rate} SYP</div>
                     `;
-                    currencyList.appendChild(listItem);
+                    ratesGrid.appendChild(card);
                 }
             });
         }
+    })
+    .catch(error => {
+        console.error('Error fetching exchange rates:', error);
+        ratesGrid.innerHTML = '<div class="error">Failed to load exchange rates</div>';
+    });
+}
 
-        // Fetch exchange rates when the page loads
-        fetchExchangeRates();
+// Initialize exchange rates when the DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateExchangeRates);
+} else {
+    updateExchangeRates();
+}
 
+// Update rates every minute
+setInterval(updateExchangeRates, 60000);
 
    
 </script>
