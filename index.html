@@ -34,34 +34,6 @@
     body[dir="rtl"] .stat-box,
     body[dir="rtl"] .contact-form {
       text-align: right;
-
-
-      /* Map container should fill the viewport */
-    #map {
-      width: 100%;
-      height: 100%;
-    }
-    /* Popup content styling */
-    .city-popup {
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-    }
-    .city-popup h3 {
-      margin: 0 0 5px;
-      font-size: 16px;
-    }
-    /* Styling for the Reset View button */
-    .reset-view-control button {
-      padding: 8px 12px;
-      background: #fff;
-      border: none;
-      border-radius: 4px;
-      box-shadow: 0 1px 5px rgba(0,0,0,0.65);
-      cursor: pointer;
-    }
-    .reset-view-control button:hover {
-      background: #f0f0f0;
-    }
   </style>
 </head>
 <body>
@@ -254,98 +226,6 @@
 
 <div id="map"></div>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    // Initialize the map centered roughly on Syria
-    var map = L.map('map').setView([35.0, 38.0], 6);
-
-    // Add OpenStreetMap tiles as the base layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap'
-    }).addTo(map);
-
-    // Array of main Syrian cities with coordinates and details
-    var cities = [
-      {
-        name: 'Damascus',
-        coords: [33.5138, 36.2765],
-        details: '<h3>Damascus</h3>' +
-                 '<p><strong>Population:</strong> 1.7M<br>' +
-                 '<strong>Historical Significance:</strong> One of the oldest continuously inhabited cities in the world.<br>' +
-                 '<strong>Key Landmarks:</strong> Umayyad Mosque, Old City.</p>'
-      },
-      {
-        name: 'Aleppo',
-        coords: [36.2021, 37.1343],
-        details: '<h3>Aleppo</h3>' +
-                 '<p><strong>Population:</strong> 2.2M<br>' +
-                 '<strong>Historical Significance:</strong> An ancient city with a rich cultural heritage.<br>' +
-                 '<strong>Key Landmarks:</strong> Aleppo Citadel, Great Mosque of Aleppo.</p>'
-      },
-      {
-        name: 'Homs',
-        coords: [34.7305, 36.7090],
-        details: '<h3>Homs</h3>' +
-                 '<p><strong>Population:</strong> 800K<br>' +
-                 '<strong>Historical Significance:</strong> Centrally important in Syrian history.<br>' +
-                 '<strong>Key Landmarks:</strong> Khalid ibn al-Walid Mosque.</p>'
-      },
-      {
-        name: 'Latakia',
-        coords: [35.5296, 35.7963],
-        details: '<h3>Latakia</h3>' +
-                 '<p><strong>Population:</strong> 400K<br>' +
-                 '<strong>Historical Significance:</strong> A key Mediterranean port city.<br>' +
-                 '<strong>Key Landmarks:</strong> Citadel of Latakia, beautiful beaches.</p>'
-      },
-      {
-        name: 'Hama',
-        coords: [35.1318, 36.7579],
-        details: '<h3>Hama</h3>' +
-                 '<p><strong>Population:</strong> 700K<br>' +
-                 '<strong>Historical Significance:</strong> Famous for its ancient waterwheels (norias).</p>'
-      },
-      {
-        name: 'Deir ez-Zor',
-        coords: [35.3350, 40.1452],
-        details: '<h3>Deir ez-Zor</h3>' +
-                 '<p><strong>Population:</strong> 250K<br>' +
-                 '<strong>Historical Significance:</strong> An important river crossing along the Euphrates and a region rich in oil.<br>' +
-                 '<strong>Key Landmarks:</strong> Euphrates River banks, historical ruins.</p>'
-      }
-    ];
-
-    // Loop through each city, add a marker, bind a popup, and set up a click event
-    cities.forEach(function(city) {
-      var marker = L.marker(city.coords).addTo(map);
-      marker.bindPopup(city.details, {className: 'city-popup'});
-      
-      marker.on('click', function(e) {
-        // Fly to the city with an animated zoom effect
-        map.flyTo(city.coords, 12, {
-          duration: 1.5  // Duration in seconds
-        });
-        // Open the popup after the fly animation completes (matching duration)
-        setTimeout(function(){
-          marker.openPopup();
-        }, 1500);
-      });
-    });
-
-    // Optional: Add a control button to reset the view to the initial Syria view
-    var resetViewControl = L.control({position: 'topright'});
-    resetViewControl.onAdd = function (map) {
-      var div = L.DomUtil.create('div', 'reset-view-control');
-      div.innerHTML = '<button>Reset View</button>';
-      div.firstChild.onclick = function () {
-        map.flyTo([35.0, 38.0], 6, {duration: 1.5});
-      };
-      return div;
-    };
-    resetViewControl.addTo(map);
-  </script>
 
 
 
@@ -845,6 +725,98 @@ document.addEventListener('DOMContentLoaded', function() {
   ></script>
 
   
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Initialize the map centered roughly on Syria
+    var map = L.map('map').setView([35.0, 38.0], 6);
+
+    // Add OpenStreetMap tiles as the base layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Array of main Syrian cities with coordinates and details
+    var cities = [
+      {
+        name: 'Damascus',
+        coords: [33.5138, 36.2765],
+        details: '<h3>Damascus</h3>' +
+                 '<p><strong>Population:</strong> 1.7M<br>' +
+                 '<strong>Historical Significance:</strong> One of the oldest continuously inhabited cities in the world.<br>' +
+                 '<strong>Key Landmarks:</strong> Umayyad Mosque, Old City.</p>'
+      },
+      {
+        name: 'Aleppo',
+        coords: [36.2021, 37.1343],
+        details: '<h3>Aleppo</h3>' +
+                 '<p><strong>Population:</strong> 2.2M<br>' +
+                 '<strong>Historical Significance:</strong> An ancient city with a rich cultural heritage.<br>' +
+                 '<strong>Key Landmarks:</strong> Aleppo Citadel, Great Mosque of Aleppo.</p>'
+      },
+      {
+        name: 'Homs',
+        coords: [34.7305, 36.7090],
+        details: '<h3>Homs</h3>' +
+                 '<p><strong>Population:</strong> 800K<br>' +
+                 '<strong>Historical Significance:</strong> Centrally important in Syrian history.<br>' +
+                 '<strong>Key Landmarks:</strong> Khalid ibn al-Walid Mosque.</p>'
+      },
+      {
+        name: 'Latakia',
+        coords: [35.5296, 35.7963],
+        details: '<h3>Latakia</h3>' +
+                 '<p><strong>Population:</strong> 400K<br>' +
+                 '<strong>Historical Significance:</strong> A key Mediterranean port city.<br>' +
+                 '<strong>Key Landmarks:</strong> Citadel of Latakia, beautiful beaches.</p>'
+      },
+      {
+        name: 'Hama',
+        coords: [35.1318, 36.7579],
+        details: '<h3>Hama</h3>' +
+                 '<p><strong>Population:</strong> 700K<br>' +
+                 '<strong>Historical Significance:</strong> Famous for its ancient waterwheels (norias).</p>'
+      },
+      {
+        name: 'Deir ez-Zor',
+        coords: [35.3350, 40.1452],
+        details: '<h3>Deir ez-Zor</h3>' +
+                 '<p><strong>Population:</strong> 250K<br>' +
+                 '<strong>Historical Significance:</strong> An important river crossing along the Euphrates and a region rich in oil.<br>' +
+                 '<strong>Key Landmarks:</strong> Euphrates River banks, historical ruins.</p>'
+      }
+    ];
+
+    // Loop through each city, add a marker, bind a popup, and set up a click event
+    cities.forEach(function(city) {
+      var marker = L.marker(city.coords).addTo(map);
+      marker.bindPopup(city.details, {className: 'city-popup'});
+      
+      marker.on('click', function(e) {
+        // Fly to the city with an animated zoom effect
+        map.flyTo(city.coords, 12, {
+          duration: 1.5  // Duration in seconds
+        });
+        // Open the popup after the fly animation completes (matching duration)
+        setTimeout(function(){
+          marker.openPopup();
+        }, 1500);
+      });
+    });
+
+    // Optional: Add a control button to reset the view to the initial Syria view
+    var resetViewControl = L.control({position: 'topright'});
+    resetViewControl.onAdd = function (map) {
+      var div = L.DomUtil.create('div', 'reset-view-control');
+      div.innerHTML = '<button>Reset View</button>';
+      div.firstChild.onclick = function () {
+        map.flyTo([35.0, 38.0], 6, {duration: 1.5});
+      };
+      return div;
+    };
+    resetViewControl.addTo(map);
+  </script>
 </body>
   <style>
   .modal {
